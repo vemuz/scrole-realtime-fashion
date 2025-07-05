@@ -1,0 +1,266 @@
+{
+// ... existing code ... <Allbirds brand section>
+  },
+  "bebe": {
+    "id": "bebe",
+    "name": "bebe",
+    "tagline": "Contemporary Fashion for the Modern Woman",
+    "story": "bebe creates contemporary fashion for the confident, sexy, modern woman. From bandage dresses to statement tops, bebe offers figure-flattering silhouettes and trend-forward designs perfect for day to night transitions.",
+    "heroImage": "https://ext.same-assets.com/2255372474/3936930429.jpeg",
+    "website": "https://www.bebe.com",
+    "founded": "1976",
+    "location": "San Francisco, CA",
+    "priceRange": "mid",
+    "categories": [
+      {
+        "category": "fashion",
+        "featured": true,
+        "priority": 1,
+        "active": true
+      }
+    ],
+    "trending": {
+      "promoted": true,
+      "promotionType": "featured",
+      "priority": 3,
+      "active": true
+    },
+    "active": true,
+    "products": [
+      {
+        "id": "bebe-1",
+        "title": "Bandage Midi Dress",
+        "model": "Black",
+        "price": "$128",
+        "originalPrice": "$158",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/2221276688.jpeg",
+            "alt": "Bandage Midi Dress in Black"
+          }
+        ],
+        "tag": "BESTSELLER",
+        "slug": "bandage-midi-dress-black",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-2",
+        "title": "Logo Bodycon Dress",
+        "model": "Blue Floral",
+        "price": "$98",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/2629265728.jpeg",
+            "alt": "Logo Bodycon Dress in Blue"
+          }
+        ],
+        "tag": "NEW",
+        "slug": "logo-bodycon-dress-blue-floral",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-3",
+        "title": "Sequin Cocktail Dress",
+        "model": "Rose Gold",
+        "price": "$185",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/2197058978.jpeg",
+            "alt": "Sequin Cocktail Dress in Rose Gold"
+          }
+        ],
+        "tag": "SPECIAL OCCASION",
+        "slug": "sequin-cocktail-dress-rose-gold",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-4",
+        "title": "Ribbed Knit Midi Dress",
+        "model": "Sage",
+        "price": "$78",
+        "originalPrice": "$98",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/1235772325.jpeg",
+            "alt": "Ribbed Knit Midi Dress in Sage"
+          }
+        ],
+        "tag": "SALE",
+        "slug": "ribbed-knit-midi-dress-sage",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-5",
+        "title": "Cutout Halter Top",
+        "model": "Lime",
+        "price": "$58",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/2813425251.jpeg",
+            "alt": "Cutout Halter Top in Lime"
+          }
+        ],
+        "tag": "TRENDING",
+        "slug": "cutout-halter-top-lime",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-6",
+        "title": "Cropped Blazer",
+        "model": "White",
+        "price": "$148",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/3816958316.jpeg",
+            "alt": "Cropped Blazer in White"
+          }
+        ],
+        "tag": "WORKWEAR",
+        "slug": "cropped-blazer-white",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-7",
+        "title": "High Waist Skinny Jeans",
+        "model": "Medium Wash",
+        "price": "$88",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/3382657830.jpeg",
+            "alt": "High Waist Skinny Jeans in Medium Wash"
+          }
+        ],
+        "tag": "DENIM",
+        "slug": "high-waist-skinny-jeans-medium-wash",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-8",
+        "title": "Leather Mini Skirt",
+        "model": "Black",
+        "price": "$118",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/3567757630.jpeg",
+            "alt": "Leather Mini Skirt in Black"
+          }
+        ],
+        "tag": "EDGY",
+        "slug": "leather-mini-skirt-black",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-9",
+        "title": "Lace Bodysuit",
+        "model": "White",
+        "price": "$68",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/1455516450.jpeg",
+            "alt": "Lace Bodysuit in White"
+          }
+        ],
+        "tag": "INTIMATE",
+        "slug": "lace-bodysuit-white",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-10",
+        "title": "Wide Leg Trousers",
+        "model": "Black",
+        "price": "$98",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/961746244.jpeg",
+            "alt": "Wide Leg Trousers in Black"
+          }
+        ],
+        "tag": "TAILORED",
+        "slug": "wide-leg-trousers-black",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-11",
+        "title": "Metallic Evening Gown",
+        "model": "Silver",
+        "price": "$248",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/1149820428.jpeg",
+            "alt": "Metallic Evening Gown in Silver"
+          }
+        ],
+        "tag": "GOWN",
+        "slug": "metallic-evening-gown-silver",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-12",
+        "title": "Wrap Front Blouse",
+        "model": "Soft Pink",
+        "price": "$78",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/191452331.jpeg",
+            "alt": "Wrap Front Blouse in Soft Pink"
+          }
+        ],
+        "tag": "FEMININE",
+        "slug": "wrap-front-blouse-soft-pink",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-13",
+        "title": "Statement Earrings",
+        "model": "Gold Chain",
+        "price": "$48",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/809571765.jpeg",
+            "alt": "Statement Earrings in Gold"
+          }
+        ],
+        "tag": "ACCESSORIES",
+        "slug": "statement-earrings-gold-chain",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-14",
+        "title": "Structured Handbag",
+        "model": "Black Leather",
+        "price": "$158",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/3441967938.jpeg",
+            "alt": "Structured Handbag in Black Leather"
+          }
+        ],
+        "tag": "HANDBAG",
+        "slug": "structured-handbag-black-leather",
+        "category": "fashion"
+      },
+      {
+        "id": "bebe-15",
+        "title": "Knit Midi Skirt",
+        "model": "Turquoise",
+        "price": "$68",
+        "originalPrice": "$88",
+        "images": [
+          {
+            "url": "https://ext.same-assets.com/2255372474/2273913118.jpeg",
+            "alt": "Knit Midi Skirt in Turquoise"
+          }
+        ],
+        "tag": "SALE",
+        "slug": "knit-midi-skirt-turquoise",
+        "category": "fashion"
+      }
+    ],
+    "metadata": {
+      "createdAt": "2025-07-04T23:45:00+00:00",
+      "updatedAt": "2025-07-04T23:45:00+00:00",
+      "totalProducts": 15,
+      "averagePrice": 113.87
+    }
+  }
+}
