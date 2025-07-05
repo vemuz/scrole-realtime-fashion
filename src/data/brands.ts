@@ -1,5 +1,5 @@
-// Centralized Brand Database - Live Shopify Brands Only
-// Dynamic product fetching from real Shopify stores
+// Centralized Brand Database - Single Source of Truth
+// This replaces scattered data across different pages and connects to admin CMS
 
 export interface ProductImage {
   url: string;
@@ -22,7 +22,7 @@ export interface BrandProduct {
 }
 
 export interface CategoryAssignment {
-  category: "fashion" | "watches" | "fitness" | "beauty";
+  category: 'fashion' | 'watches' | 'fitness' | 'beauty';
   featured: boolean;
   priority: number;
   active: boolean;
@@ -30,7 +30,7 @@ export interface CategoryAssignment {
 
 export interface TrendingConfig {
   promoted: boolean;
-  promotionType: "paid" | "featured" | "new" | "sale" | "exclusive";
+  promotionType: 'paid' | 'featured' | 'new' | 'sale' | 'exclusive';
   priority: number;
   campaignEndDate?: string;
   active: boolean;
@@ -45,14 +45,12 @@ export interface BrandData {
   logo?: string;
   founded?: string;
   location?: string;
-  website: string;
-  shopifyDomain: string;
-  priceRange: "budget" | "mid" | "luxury" | "ultra-luxury";
+  website?: string;
+  priceRange: 'budget' | 'mid' | 'luxury' | 'ultra-luxury';
   categories: CategoryAssignment[];
   trending: TrendingConfig;
   active: boolean;
-  isLive: boolean;
-  products: BrandProduct[]; // Empty for live brands - products fetched dynamically
+  products: BrandProduct[];
   metadata: {
     createdAt: string;
     updatedAt: string;
@@ -61,327 +59,581 @@ export interface BrandData {
   };
 }
 
-// LIVE SHOPIFY BRANDS DATABASE - Real-time product data
+// Helper function to generate SEO-friendly slugs
+function generateSlug(title: string, model: string): string {
+  const combined = `${title} ${model}`;
+  return combined
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9\s\-]/g, '')
+    .trim()
+    .replace(/\s+/g, '_')
+    .replace(/-+/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_+|_+$/g, '');
+}
+
+// CENTRALIZED BRAND DATABASE
 export const BRANDS_DATABASE: Record<string, BrandData> = {
-  bebe: {
-    id: "bebe",
-    name: "bebe",
-    tagline: "Chic & Contemporary Clothing",
-    story:
-      "bebe offers contemporary fashion for confident women. From statement dresses to everyday essentials, we create pieces that celebrate femininity and style.",
-    heroImage: "https://ext.same-assets.com/2255372474/3029823999.jpeg",
-    website: "https://www.bebe.com",
-    shopifyDomain: "www.bebe.com",
-    founded: "1976",
-    location: "San Francisco, CA",
-    priceRange: "mid",
+  'bebe': {
+    id: 'bebe',
+    name: 'bebe',
+    tagline: 'Chic & Contemporary Clothing',
+    story: 'bebe offers contemporary fashion for confident women. From statement dresses to everyday essentials, we create pieces that celebrate femininity and style.',
+    heroImage: 'https://ext.same-assets.com/2255372474/3029823999.jpeg',
+    website: 'https://www.bebe.com',
+    founded: '1976',
+    location: 'San Francisco, CA',
+    priceRange: 'mid',
     categories: [
-      { category: "fashion", featured: true, priority: 1, active: true },
+      { category: 'fashion', featured: true, priority: 1, active: true }
     ],
     trending: {
       promoted: true,
-      promotionType: "featured",
+      promotionType: 'featured',
       priority: 1,
-      active: true,
+      active: true
     },
     active: true,
-    isLive: true,
-    products: [], // Live products fetched from Shopify
+    products: [
+      {
+        id: 'bebe-1',
+        title: 'Ombre Chiffon Cowl Dress',
+        model: 'Brown White',
+        price: '$118',
+        images: [
+          { url: 'https://ext.same-assets.com/2255372474/1693421825.jpeg', alt: 'Ombre Chiffon Cowl Dress in Brown White' }
+        ],
+        tag: 'NEW',
+        externalUrl: 'https://www.bebe.com/collections/new-dresses/products/ombre-chiffon-cowl-dress-brown-white',
+        slug: generateSlug('Ombre Chiffon Cowl Dress', 'Brown White'),
+        category: 'fashion'
+      },
+      {
+        id: 'bebe-2',
+        title: 'Ombre Chiffon Cowl Dress',
+        model: 'Purple Pink',
+        price: '$118',
+        images: [
+          { url: 'https://ext.same-assets.com/2255372474/1410155671.jpeg', alt: 'Ombre Chiffon Cowl Dress in Purple Pink' }
+        ],
+        tag: 'NEW',
+        externalUrl: 'https://www.bebe.com/collections/new-dresses/products/ombre-chiffon-cowl-dress-purple-pink',
+        slug: generateSlug('Ombre Chiffon Cowl Dress', 'Purple Pink'),
+        category: 'fashion'
+      },
+      {
+        id: 'bebe-3',
+        title: '3D Floral Strapless Gown',
+        model: 'Black',
+        price: '$198',
+        images: [
+          { url: 'https://www.bebe.com/cdn/shop/files/bebe1364_black_1_b6b17418-2867-4f15-8fa9-be0986994c8c_750x.jpg?v=1748558657', alt: '3D Floral Strapless Gown in Black' }
+        ],
+        tag: 'FORMAL',
+        externalUrl: 'https://www.bebe.com/collections/new-dresses/products/3d-floral-strapless-gown-black',
+        slug: generateSlug('3D Floral Strapless Gown', 'Black'),
+        category: 'fashion'
+      }
+    ],
     metadata: {
-      createdAt: "2025-01-05T10:00:00Z",
-      updatedAt: "2025-01-05T10:00:00Z",
-      totalProducts: 0, // Dynamic count
-      averagePrice: 0, // Dynamic calculation
-    },
+      createdAt: '2025-01-04T10:00:00Z',
+      updatedAt: '2025-01-04T15:30:00Z',
+      totalProducts: 3,
+      averagePrice: 144.67
+    }
   },
 
-  "daniel-wellington": {
-    id: "daniel-wellington",
-    name: "Daniel Wellington",
-    tagline: "Timeless Luxury Watches",
-    story:
-      "Daniel Wellington creates classic and timeless watches with a Scandinavian design aesthetic. Our watches combine minimalist style with premium materials.",
-    heroImage: "https://ext.same-assets.com/414496998/1760714005.jpeg",
-    website: "https://www.danielwellington.com",
-    shopifyDomain: "www.danielwellington.com",
-    founded: "2011",
-    location: "Stockholm, Sweden",
-    priceRange: "mid",
+  'everlane': {
+    id: 'everlane',
+    name: 'Everlane',
+    tagline: 'Radical Transparency. Sustainable Fashion.',
+    story: 'Everlane is a modern clothing company that reveals the true cost of our clothing. We source the finest materials and work with the most ethical factories to create timeless pieces at honest prices.',
+    heroImage: 'https://ext.same-assets.com/1014321061/645627194.jpeg',
+    website: 'https://www.everlane.com',
+    founded: '2010',
+    location: 'San Francisco, CA',
+    priceRange: 'mid',
     categories: [
-      { category: "watches", featured: true, priority: 1, active: true },
+      { category: 'fashion', featured: true, priority: 2, active: true }
     ],
     trending: {
       promoted: true,
-      promotionType: "paid",
+      promotionType: 'featured',
       priority: 2,
-      active: true,
+      active: true
     },
     active: true,
-    isLive: true,
-    products: [], // Live products fetched from Shopify
+    products: [
+      {
+        id: 'everlane-1',
+        title: 'The Lace Trim Caftan Dress',
+        model: 'White',
+        price: '$98',
+        images: [
+          { url: 'https://ext.same-assets.com/1014321061/3842799923.jpeg', alt: 'The Lace Trim Caftan Dress in White' }
+        ],
+        tag: 'BESTSELLER',
+        slug: generateSlug('The Lace Trim Caftan Dress', 'White'),
+        category: 'fashion'
+      },
+      {
+        id: 'everlane-2',
+        title: 'The Gauze Smock Dress',
+        model: 'Navy',
+        price: '$88',
+        originalPrice: '$98',
+        images: [
+          { url: 'https://ext.same-assets.com/1014321061/2919539626.jpeg', alt: 'The Gauze Smock Dress in Navy' }
+        ],
+        tag: 'SALE',
+        slug: generateSlug('The Gauze Smock Dress', 'Navy'),
+        category: 'fashion'
+      }
+    ],
     metadata: {
-      createdAt: "2025-01-05T10:00:00Z",
-      updatedAt: "2025-01-05T10:00:00Z",
-      totalProducts: 0, // Dynamic count
-      averagePrice: 0, // Dynamic calculation
-    },
+      createdAt: '2025-01-04T10:00:00Z',
+      updatedAt: '2025-01-04T15:30:00Z',
+      totalProducts: 2,
+      averagePrice: 93
+    }
   },
 
-  triwa: {
-    id: "triwa",
-    name: "TRIWA",
-    tagline: "Time for Oceans - Sustainable Watches",
-    story:
-      "TRIWA creates sustainable watches that boldly champion awareness and change, driven by our unwavering commitment to bring positive impact to our world. Our Time for Oceans collection features watches made from recycled ocean plastic.",
-    heroImage: "https://ext.same-assets.com/3339224669/2696985554.jpeg",
-    website: "https://triwa.com",
-    shopifyDomain: "triwa.com",
-    founded: "2007",
-    location: "Stockholm, Sweden",
-    priceRange: "mid",
+  'daniel-wellington': {
+    id: 'daniel-wellington',
+    name: 'Daniel Wellington',
+    tagline: 'Timeless Luxury Watches',
+    story: 'Daniel Wellington creates classic and timeless watches with a Scandinavian design aesthetic. Our watches combine minimalist style with premium materials.',
+    heroImage: 'https://ext.same-assets.com/414496998/1760714005.jpeg',
+    website: 'https://www.danielwellington.com',
+    founded: '2011',
+    location: 'Stockholm, Sweden',
+    priceRange: 'mid',
     categories: [
-      { category: "watches", featured: true, priority: 2, active: true },
+      { category: 'watches', featured: true, priority: 1, active: true }
     ],
     trending: {
       promoted: true,
-      promotionType: "exclusive",
+      promotionType: 'paid',
       priority: 3,
-      campaignEndDate: "2025-02-01",
-      active: true,
+      active: true
     },
     active: true,
-    isLive: true,
-    products: [], // Live products fetched from Shopify
+    products: [
+      {
+        id: 'dw-1',
+        title: 'Classic Petite Melrose',
+        model: 'Rose Gold, 32mm',
+        price: '$199',
+        images: [
+          { url: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=600&h=600&fit=crop&q=80', alt: 'Classic Petite Melrose in Rose Gold', aspectRatio: 'aspect-[1/1]' }
+        ],
+        tag: 'BESTSELLER',
+        slug: generateSlug('Classic Petite Melrose', 'Rose Gold 32mm'),
+        category: 'watches'
+      },
+      {
+        id: 'dw-2',
+        title: 'Classic Sheffield',
+        model: 'Silver, 40mm',
+        price: '$229',
+        images: [
+          { url: 'https://images.unsplash.com/photo-1594534475808-b18fc33b045e?w=600&h=600&fit=crop&q=80', alt: 'Classic Sheffield in Silver', aspectRatio: 'aspect-[1/1]' }
+        ],
+        slug: generateSlug('Classic Sheffield', 'Silver 40mm'),
+        category: 'watches'
+      }
+    ],
     metadata: {
-      createdAt: "2025-01-05T10:00:00Z",
-      updatedAt: "2025-01-05T10:00:00Z",
-      totalProducts: 0, // Dynamic count
-      averagePrice: 0, // Dynamic calculation
-    },
+      createdAt: '2025-01-04T10:00:00Z',
+      updatedAt: '2025-01-04T15:30:00Z',
+      totalProducts: 2,
+      averagePrice: 214
+    }
   },
 
-  undone: {
-    id: "undone",
-    name: "UNDONE",
-    tagline: "Custom Watches - Your Story, Your Moment",
-    story:
-      "UNDONE is the world's leading custom watch brand. We believe individuality matters - design your own custom-made watch online today and let your personality shine through with limitless customization possibilities.",
-    heroImage: "https://ext.same-assets.com/3157802305/2103087309.png",
-    website: "https://undone.com",
-    shopifyDomain: "undone.com",
-    founded: "2014",
-    location: "Hong Kong",
-    priceRange: "mid",
+  'mr-jones-watches': {
+    id: 'mr-jones-watches',
+    name: 'Mr Jones Watches',
+    tagline: 'We make unforgettable watches',
+    story: 'Mr Jones Watches creates unusual watches which tell a story, start a conversation or simply make you smile. We are a passionate team working from our London studios to bring you watches that are a bit different.',
+    heroImage: 'https://ext.same-assets.com/2203422482/2515575930.jpeg',
+    website: 'https://mrjoneswatches.com',
+    founded: '2007',
+    location: 'London, England',
+    priceRange: 'mid',
     categories: [
-      { category: "watches", featured: true, priority: 3, active: true },
+      { category: 'watches', featured: true, priority: 2, active: true }
     ],
     trending: {
       promoted: false,
-      promotionType: "new",
-      priority: 4,
-      active: true,
+      promotionType: 'new',
+      priority: 10,
+      active: true
     },
     active: true,
-    isLive: true,
-    products: [], // Live products fetched from Shopify
+    products: [
+      {
+        id: 'mjw-1',
+        title: 'A perfectly useless afternoon',
+        model: 'Blue',
+        price: '£195.00',
+        images: [
+          { url: 'https://ext.same-assets.com/2203422482/512678917.jpeg', alt: 'A perfectly useless afternoon watch', aspectRatio: 'aspect-[1/1]' }
+        ],
+        tag: 'ARTISTIC',
+        slug: generateSlug('A perfectly useless afternoon', 'Blue'),
+        category: 'watches'
+      },
+      {
+        id: 'mjw-2',
+        title: 'Ricochet',
+        model: 'Limited Edition',
+        price: '£275.00',
+        images: [
+          { url: 'https://ext.same-assets.com/2203422482/2820538818.jpeg', alt: 'Ricochet Limited Edition watch', aspectRatio: 'aspect-[1/1]' }
+        ],
+        tag: 'LIMITED',
+        slug: generateSlug('Ricochet', 'Limited Edition'),
+        category: 'watches'
+      }
+    ],
     metadata: {
-      createdAt: "2025-01-05T10:00:00Z",
-      updatedAt: "2025-01-05T10:00:00Z",
-      totalProducts: 0, // Dynamic count
-      averagePrice: 0, // Dynamic calculation
-    },
+      createdAt: '2025-01-04T16:00:00Z',
+      updatedAt: '2025-01-04T16:00:00Z',
+      totalProducts: 2,
+      averagePrice: 235
+    }
   },
 
-  "steve-madden": {
-    id: "steve-madden",
-    name: "Steve Madden",
-    tagline: "Fashion Footwear & Accessories",
-    story:
-      "Steve Madden is a leading fashion footwear and accessories brand, offering stylish shoes and bags that blend fashion-forward design with accessible pricing for trend-conscious consumers.",
-    heroImage:
-      "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=1200&h=400&fit=crop&q=80",
-    website: "https://www.stevemadden.com",
-    shopifyDomain: "www.stevemadden.com",
-    founded: "1990",
-    location: "New York, NY",
-    priceRange: "mid",
+  'triwa': {
+    id: 'triwa',
+    name: 'TRIWA',
+    tagline: 'Time for Oceans - Sustainable Watches',
+    story: 'TRIWA creates sustainable watches that boldly champion awareness and change, driven by our unwavering commitment to bring positive impact to our world. Our Time for Oceans collection features watches made from recycled ocean plastic.',
+    heroImage: 'https://ext.same-assets.com/3339224669/2696985554.jpeg',
+    website: 'https://triwa.com',
+    founded: '2007',
+    location: 'Stockholm, Sweden',
+    priceRange: 'mid',
     categories: [
-      { category: "fashion", featured: true, priority: 2, active: true },
+      { category: 'watches', featured: true, priority: 3, active: true }
     ],
     trending: {
       promoted: true,
-      promotionType: "featured",
+      promotionType: 'exclusive',
       priority: 5,
-      active: true,
+      campaignEndDate: '2025-02-01',
+      active: true
     },
     active: true,
-    isLive: true,
-    products: [], // Live products fetched from Shopify
+    products: [
+      {
+        id: 'triwa-1',
+        title: 'Ocean Plastic Timer Blue',
+        model: 'Sustainable Collection',
+        price: '$214.00',
+        images: [
+          { url: 'https://ext.same-assets.com/3339224669/3385789620.png', alt: 'Ocean Plastic Timer Blue', aspectRatio: 'aspect-[1/1]' }
+        ],
+        tag: 'SUSTAINABLE',
+        slug: generateSlug('Ocean Plastic Timer Blue', 'Sustainable Collection'),
+        category: 'watches'
+      },
+      {
+        id: 'triwa-2',
+        title: 'SSAB Fossil Free Steel',
+        model: 'Blue',
+        price: '$267.00',
+        images: [
+          { url: 'https://ext.same-assets.com/3339224669/1452265458.png', alt: 'SSAB Fossil Free Steel watch', aspectRatio: 'aspect-[1/1]' }
+        ],
+        tag: 'ECO-FRIENDLY',
+        slug: generateSlug('SSAB Fossil Free Steel', 'Blue'),
+        category: 'watches'
+      }
+    ],
     metadata: {
-      createdAt: "2025-01-05T10:00:00Z",
-      updatedAt: "2025-01-05T10:00:00Z",
-      totalProducts: 0, // Dynamic count
-      averagePrice: 0, // Dynamic calculation
-    },
+      createdAt: '2025-01-04T16:00:00Z',
+      updatedAt: '2025-01-04T16:00:00Z',
+      totalProducts: 2,
+      averagePrice: 240.5
+    }
   },
 
-  "oh-polly": {
-    id: "oh-polly",
-    name: "Oh Polly",
-    tagline: "Luxe Party Dresses & Going Out Outfits",
-    story:
-      "Oh Polly creates luxurious party dresses and going out outfits for confident women. Our designs celebrate femininity with bold cuts, premium fabrics, and attention-grabbing details.",
-    heroImage:
-      "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=1200&h=400&fit=crop&q=80",
-    website: "https://www.ohpolly.com",
-    shopifyDomain: "www.ohpolly.com",
-    founded: "2015",
-    location: "Manchester, UK",
-    priceRange: "mid",
+  'undone': {
+    id: 'undone',
+    name: 'UNDONE',
+    tagline: 'Custom Watches - Your Story, Your Moment',
+    story: 'UNDONE is the world\'s leading custom watch brand. We believe individuality matters - design your own custom-made watch online today and let your personality shine through with limitless customization possibilities.',
+    heroImage: 'https://ext.same-assets.com/3157802305/2103087309.png',
+    website: 'https://undone.com',
+    founded: '2014',
+    location: 'Hong Kong',
+    priceRange: 'mid',
     categories: [
-      { category: "fashion", featured: true, priority: 3, active: true },
+      { category: 'watches', featured: true, priority: 4, active: true }
+    ],
+    trending: {
+      promoted: false,
+      promotionType: 'new',
+      priority: 11,
+      active: true
+    },
+    active: true,
+    products: [
+      {
+        id: 'undone-1',
+        title: 'Aqua Carbon Maggy',
+        model: 'Custom Design',
+        price: '$680.00',
+        images: [
+          { url: 'https://ext.same-assets.com/3157802305/2760313276.jpeg', alt: 'Aqua Carbon Maggy custom watch', aspectRatio: 'aspect-[1/1]' }
+        ],
+        tag: 'CUSTOM',
+        slug: generateSlug('Aqua Carbon Maggy', 'Custom Design'),
+        category: 'watches'
+      },
+      {
+        id: 'undone-2',
+        title: 'Vintage Killy',
+        model: 'Heritage Collection',
+        price: '$450.00',
+        images: [
+          { url: 'https://ext.same-assets.com/3157802305/239172405.jpeg', alt: 'Vintage Killy Heritage watch', aspectRatio: 'aspect-[1/1]' }
+        ],
+        tag: 'VINTAGE',
+        slug: generateSlug('Vintage Killy', 'Heritage Collection'),
+        category: 'watches'
+      }
+    ],
+    metadata: {
+      createdAt: '2025-01-04T16:00:00Z',
+      updatedAt: '2025-01-04T16:00:00Z',
+      totalProducts: 2,
+      averagePrice: 565
+    }
+  },
+
+  'cluse': {
+    id: 'cluse',
+    name: 'CLUSE',
+    tagline: 'Modern watches, jewellery and bags',
+    story: 'CLUSE creates modern watches, jewellery and bags for men and women. Our minimalist Dutch design philosophy celebrates understated elegance and timeless style with contemporary touches.',
+    heroImage: 'https://ext.same-assets.com/2844358747/380663606.jpeg',
+    website: 'https://cluse.com',
+    founded: '2013',
+    location: 'Amsterdam, Netherlands',
+    priceRange: 'budget',
+    categories: [
+      { category: 'watches', featured: true, priority: 5, active: true }
+    ],
+    trending: {
+      promoted: false,
+      promotionType: 'sale',
+      priority: 12,
+      active: true
+    },
+    active: true,
+    products: [
+      {
+        id: 'cluse-1',
+        title: 'Gracieuse Petite Watch',
+        model: 'Steel, White, Gold Colour',
+        price: '€109.95',
+        images: [
+          { url: 'https://ext.same-assets.com/2844358747/1987259623.jpeg', alt: 'Gracieuse Petite Watch in Gold', aspectRatio: 'aspect-[1/1]' }
+        ],
+        tag: 'BESTSELLER',
+        slug: generateSlug('Gracieuse Petite Watch', 'Steel White Gold'),
+        category: 'watches'
+      },
+      {
+        id: 'cluse-2',
+        title: 'Minuit Multifunction Watch',
+        model: 'Steel, Full Gold colour',
+        price: '€71.97',
+        originalPrice: '€119.95',
+        images: [
+          { url: 'https://ext.same-assets.com/2844358747/2460001243.jpeg', alt: 'Minuit Multifunction Watch in Gold', aspectRatio: 'aspect-[1/1]' }
+        ],
+        tag: 'SALE',
+        slug: generateSlug('Minuit Multifunction Watch', 'Steel Full Gold'),
+        category: 'watches'
+      }
+    ],
+    metadata: {
+      createdAt: '2025-01-04T16:00:00Z',
+      updatedAt: '2025-01-04T16:00:00Z',
+      totalProducts: 2,
+      averagePrice: 90.96
+    }
+  },
+
+  'vincero-collective': {
+    id: 'vincero-collective',
+    name: 'Vincero Collective',
+    tagline: 'One Day or Day One. You Decide.',
+    story: 'Moments matter. At Vincero, we craft designs to commemorate the moments that matter most, so you never lose sight of what drives you forward. Our men\'s jewelry, watches, and eyewear celebrate life\'s defining moments.',
+    heroImage: 'https://ext.same-assets.com/1391019832/570626657.jpeg',
+    website: 'https://vincerocollective.com',
+    founded: '2014',
+    location: 'San Diego, CA',
+    priceRange: 'mid',
+    categories: [
+      { category: 'watches', featured: true, priority: 6, active: true }
+    ],
+    trending: {
+      promoted: false,
+      promotionType: 'sale',
+      priority: 13,
+      active: true
+    },
+    active: true,
+    products: [
+      {
+        id: 'vincero-1',
+        title: 'Father\'s Edition',
+        model: 'Girl Dad',
+        price: '$329.00',
+        originalPrice: '$379.00',
+        images: [
+          { url: 'https://ext.same-assets.com/1391019832/393143447.jpeg', alt: 'Father\'s Edition Girl Dad watch', aspectRatio: 'aspect-[1/1]' }
+        ],
+        tag: 'LIMITED',
+        slug: generateSlug('Father\'s Edition', 'Girl Dad'),
+        category: 'watches'
+      },
+      {
+        id: 'vincero-2',
+        title: 'Chrono Limited Edition',
+        model: 'Blue Phantom',
+        price: '$303.20',
+        originalPrice: '$379.00',
+        images: [
+          { url: 'https://ext.same-assets.com/1391019832/366654346.jpeg', alt: 'Chrono Limited Edition Blue Phantom', aspectRatio: 'aspect-[1/1]' }
+        ],
+        tag: 'LIMITED',
+        slug: generateSlug('Chrono Limited Edition', 'Blue Phantom'),
+        category: 'watches'
+      }
+    ],
+    metadata: {
+      createdAt: '2025-01-04T16:00:00Z',
+      updatedAt: '2025-01-04T16:00:00Z',
+      totalProducts: 2,
+      averagePrice: 316.1
+    }
+  },
+
+  'lululemon': {
+    id: 'lululemon',
+    name: 'Lululemon',
+    tagline: 'Tech-Enhanced Activewear',
+    story: 'Lululemon creates premium athletic wear designed for yoga, running, training, and life. Our innovative fabrics and thoughtful design help you move through your day with confidence.',
+    heroImage: 'https://images.lululemon.com/is/image/lululemon/na_Jun25_wk5_W_Train_3_1_D_HP?wid=2420',
+    website: 'https://shop.lululemon.com',
+    founded: '1998',
+    location: 'Vancouver, Canada',
+    priceRange: 'luxury',
+    categories: [
+      { category: 'fashion', featured: false, priority: 3, active: true },
+      { category: 'fitness', featured: true, priority: 1, active: true }
     ],
     trending: {
       promoted: true,
-      promotionType: "featured",
+      promotionType: 'paid',
+      priority: 4,
+      active: true
+    },
+    active: true,
+    products: [
+      {
+        id: 'lulu-1',
+        title: 'Align High-Rise Pant',
+        model: 'Black, Size 6',
+        price: '$128',
+        images: [
+          { url: 'https://images.unsplash.com/photo-1506629905607-d9f2e5e78824?w=600&h=600&fit=crop&q=80', alt: 'Align High-Rise Pant in Black' }
+        ],
+        tag: 'BESTSELLER',
+        slug: generateSlug('Align High-Rise Pant', 'Black Size 6'),
+        category: 'fitness'
+      },
+      {
+        id: 'lulu-2',
+        title: 'Everywhere Belt Bag',
+        model: 'Cayenne',
+        price: '$38',
+        images: [
+          { url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=600&h=600&fit=crop&q=80', alt: 'Everywhere Belt Bag in Cayenne' }
+        ],
+        stock: 'Few left',
+        slug: generateSlug('Everywhere Belt Bag', 'Cayenne'),
+        category: 'fitness'
+      }
+    ],
+    metadata: {
+      createdAt: '2025-01-04T10:00:00Z',
+      updatedAt: '2025-01-04T15:30:00Z',
+      totalProducts: 2,
+      averagePrice: 83
+    }
+  },
+
+  'cncpts': {
+    id: 'cncpts',
+    name: 'CNCPTS',
+    tagline: 'Streetwear, Luxury Fashion & Footwear',
+    story: 'CNCPTS is a premier streetwear and luxury fashion retailer offering curated collections of footwear, apparel and accessories from the world\'s most sought-after brands.',
+    heroImage: 'http://cncpts.com/cdn/shop/articles/cncpts_miami_store_hero_1.jpg?v=1733842520',
+    website: 'https://cncpts.com',
+    founded: '2004',
+    location: 'Toronto, Canada',
+    priceRange: 'luxury',
+    categories: [
+      { category: 'fashion', featured: true, priority: 4, active: true }
+    ],
+    trending: {
+      promoted: false,
+      promotionType: 'new',
       priority: 6,
-      active: true,
+      active: true
     },
     active: true,
-    isLive: true,
-    products: [], // Live products fetched from Shopify
-    metadata: {
-      createdAt: "2025-01-05T10:00:00Z",
-      updatedAt: "2025-01-05T10:00:00Z",
-      totalProducts: 0, // Dynamic count
-      averagePrice: 0, // Dynamic calculation
-    },
-  },
-
-  "new-era-cap": {
-    id: "new-era-cap",
-    name: "New Era",
-    tagline: "Official Headwear & Lifestyle Brand",
-    story:
-      "New Era is the official headwear brand of Major League Baseball and a leading lifestyle brand worldwide. We create premium caps, apparel, and accessories that celebrate sports culture and street style.",
-    heroImage:
-      "https://images.unsplash.com/photo-1521369909029-2afed882baee?w=1200&h=400&fit=crop&q=80",
-    website: "https://www.neweracap.com",
-    shopifyDomain: "www.neweracap.com",
-    founded: "1920",
-    location: "Buffalo, NY",
-    priceRange: "mid",
-    categories: [
-      { category: "fashion", featured: true, priority: 4, active: true },
+    products: [
+      {
+        id: 'cncpts-1',
+        title: 'Air Jordan 3 Retro',
+        model: 'White/Metallic Silver',
+        price: '$205',
+        images: [
+          { url: 'https://cdn.shopify.com/s/files/1/0043/5673/5045/files/198481069712-1.jpg?v=1749833921', alt: 'Air Jordan 3 Retro in White/Metallic Silver', aspectRatio: 'aspect-[4/3]' }
+        ],
+        tag: 'ICONIC',
+        slug: generateSlug('Air Jordan 3 Retro', 'White/Metallic Silver'),
+        category: 'fashion'
+      },
+      {
+        id: 'cncpts-2',
+        title: 'Market Bubble Letter T-Shirt',
+        model: 'White',
+        price: '$16',
+        originalPrice: '$20',
+        images: [
+          { url: 'https://cdn.shopify.com/s/files/1/0043/5673/5045/products/Market_BubbleLetterT-ShirtWHITE_399001108_01.jpg?v=1660570395', alt: 'Market Bubble Letter T-Shirt in White', aspectRatio: 'aspect-[3/4]' }
+        ],
+        tag: 'SALE',
+        slug: generateSlug('Market Bubble Letter T-Shirt', 'White'),
+        category: 'fashion'
+      }
     ],
-    trending: {
-      promoted: false,
-      promotionType: "new",
-      priority: 7,
-      active: true,
-    },
-    active: true,
-    isLive: true,
-    products: [], // Live products fetched from Shopify
     metadata: {
-      createdAt: "2025-01-05T10:00:00Z",
-      updatedAt: "2025-01-05T10:00:00Z",
-      totalProducts: 0, // Dynamic count
-      averagePrice: 0, // Dynamic calculation
-    },
-  },
-
-  "frankies-bikinis": {
-    id: "frankies-bikinis",
-    name: "Frankie's Bikinis",
-    tagline: "Dreamy Swimwear & Beach Lifestyle",
-    story:
-      "Frankie's Bikinis creates dreamy swimwear and beach lifestyle pieces inspired by vintage aesthetics and California culture. Our collections celebrate femininity, adventure, and the endless summer spirit.",
-    heroImage:
-      "https://images.unsplash.com/photo-1544966503-7cc531c3a4c5?w=1200&h=400&fit=crop&q=80",
-    website: "https://frankiesbikinis.com",
-    shopifyDomain: "frankiesbikinis.com",
-    founded: "2012",
-    location: "Malibu, CA",
-    priceRange: "mid",
-    categories: [
-      { category: "fashion", featured: true, priority: 5, active: true },
-    ],
-    trending: {
-      promoted: true,
-      promotionType: "sale",
-      priority: 8,
-      active: true,
-    },
-    active: true,
-    isLive: true,
-    products: [], // Live products fetched from Shopify
-    metadata: {
-      createdAt: "2025-01-05T10:00:00Z",
-      updatedAt: "2025-01-05T10:00:00Z",
-      totalProducts: 0, // Dynamic count
-      averagePrice: 0, // Dynamic calculation
-    },
-  },
-
-  "unique-vintage": {
-    id: "unique-vintage",
-    name: "Unique Vintage",
-    tagline: "Vintage-Inspired Fashion for Modern Women",
-    story:
-      "Unique Vintage brings you vintage-inspired fashion that celebrates the glamour and elegance of past decades. Our collections feature retro dresses, accessories, and shoes with modern fits and quality.",
-    heroImage:
-      "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1200&h=400&fit=crop&q=80",
-    website: "https://www.unique-vintage.com",
-    shopifyDomain: "unique-vintage.com",
-    founded: "2000",
-    location: "Burbank, CA",
-    priceRange: "mid",
-    categories: [
-      { category: "fashion", featured: true, priority: 6, active: true },
-    ],
-    trending: {
-      promoted: false,
-      promotionType: "new",
-      priority: 9,
-      active: true,
-    },
-    active: true,
-    isLive: true,
-    products: [], // Live products fetched from Shopify
-    metadata: {
-      createdAt: "2025-01-05T10:00:00Z",
-      updatedAt: "2025-01-05T10:00:00Z",
-      totalProducts: 0, // Dynamic count
-      averagePrice: 0, // Dynamic calculation
-    },
-  },
-};
-
-// Live Shopify brand identifiers
-export const LIVE_SHOPIFY_BRANDS = [
-  "bebe",
-  "daniel-wellington",
-  "triwa",
-  "undone",
-  "steve-madden",
-  "oh-polly",
-  "new-era-cap",
-  "frankies-bikinis",
-  "unique-vintage",
-];
-
-// Domain mapping for dynamic fetching
-export const SHOPIFY_DOMAIN_MAP: Record<string, string> = {
-  bebe: "www.bebe.com",
-  "daniel-wellington": "www.danielwellington.com",
-  triwa: "triwa.com",
-  undone: "undone.com",
-  "steve-madden": "www.stevemadden.com",
-  "oh-polly": "www.ohpolly.com",
-  "new-era-cap": "www.neweracap.com",
-  "frankies-bikinis": "frankiesbikinis.com",
-  "unique-vintage": "unique-vintage.com",
+      createdAt: '2025-01-04T10:00:00Z',
+      updatedAt: '2025-01-04T15:30:00Z',
+      totalProducts: 2,
+      averagePrice: 110.5
+    }
+  }
 };
 
 // HELPER FUNCTIONS FOR DATA ACCESS
@@ -394,103 +646,72 @@ export const getAllBrands = (): BrandData[] => {
 };
 
 export const getActiveBrands = (): BrandData[] => {
-  return getAllBrands().filter((brand) => brand.active);
+  return getAllBrands().filter(brand => brand.active);
 };
 
-export const getLiveBrands = (): BrandData[] => {
-  return getActiveBrands().filter((brand) => brand.isLive);
-};
-
-export const getBrandsByCategory = (
-  category: CategoryAssignment["category"],
-): BrandData[] => {
-  return getActiveBrands().filter((brand) =>
-    brand.categories.some((cat) => cat.category === category && cat.active),
+export const getBrandsByCategory = (category: CategoryAssignment['category']): BrandData[] => {
+  return getActiveBrands().filter(brand =>
+    brand.categories.some(cat => cat.category === category && cat.active)
   );
 };
 
 export const getTrendingBrands = (): BrandData[] => {
   return getActiveBrands()
-    .filter((brand) => brand.trending.promoted && brand.trending.active)
+    .filter(brand => brand.trending.promoted && brand.trending.active)
     .sort((a, b) => a.trending.priority - b.trending.priority);
 };
 
-export const getFeaturedBrandsForCategory = (
-  category: CategoryAssignment["category"],
-): BrandData[] => {
+export const getFeaturedBrandsForCategory = (category: CategoryAssignment['category']): BrandData[] => {
   return getBrandsByCategory(category)
-    .filter((brand) =>
-      brand.categories.some((cat) => cat.category === category && cat.featured),
-    )
+    .filter(brand => brand.categories.some(cat => cat.category === category && cat.featured))
     .sort((a, b) => {
-      const aCategory = a.categories.find((cat) => cat.category === category);
-      const bCategory = b.categories.find((cat) => cat.category === category);
+      const aCategory = a.categories.find(cat => cat.category === category);
+      const bCategory = b.categories.find(cat => cat.category === category);
       return (aCategory?.priority || 999) - (bCategory?.priority || 999);
     });
 };
 
 export const searchBrands = (query: string): BrandData[] => {
   const searchTerm = query.toLowerCase();
-  return getActiveBrands().filter(
-    (brand) =>
-      brand.name.toLowerCase().includes(searchTerm) ||
-      brand.tagline.toLowerCase().includes(searchTerm) ||
-      brand.story.toLowerCase().includes(searchTerm),
+  return getActiveBrands().filter(brand =>
+    brand.name.toLowerCase().includes(searchTerm) ||
+    brand.tagline.toLowerCase().includes(searchTerm) ||
+    brand.story.toLowerCase().includes(searchTerm)
   );
 };
 
-export const getBrandsByPriceRange = (
-  priceRange: BrandData["priceRange"],
-): BrandData[] => {
-  return getActiveBrands().filter((brand) => brand.priceRange === priceRange);
+export const getBrandsByPriceRange = (priceRange: BrandData['priceRange']): BrandData[] => {
+  return getActiveBrands().filter(brand => brand.priceRange === priceRange);
 };
 
 export const getRecentlyUpdatedBrands = (limit = 5): BrandData[] => {
   return getActiveBrands()
-    .sort(
-      (a, b) =>
-        new Date(b.metadata.updatedAt).getTime() -
-        new Date(a.metadata.updatedAt).getTime(),
-    )
+    .sort((a, b) => new Date(b.metadata.updatedAt).getTime() - new Date(a.metadata.updatedAt).getTime())
     .slice(0, limit);
-};
-
-// Check if brand uses dynamic Shopify fetching
-export const isLiveBrand = (brandId: string): boolean => {
-  return LIVE_SHOPIFY_BRANDS.includes(brandId);
-};
-
-// Get Shopify domain for brand
-export const getShopifyDomain = (brandId: string): string | undefined => {
-  return SHOPIFY_DOMAIN_MAP[brandId];
 };
 
 // CATEGORY CONFIGURATION
 export const CATEGORY_CONFIG = {
   fashion: {
-    name: "Fashion",
-    description: "Contemporary fashion for confident individuals",
-    heroImage:
-      "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=400&fit=crop&q=80",
+    name: 'Fashion',
+    description: 'Contemporary fashion for confident individuals',
+    heroImage: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=400&fit=crop&q=80'
   },
   watches: {
-    name: "Watches",
-    description: "Timepieces that tell your story",
-    heroImage:
-      "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=1200&h=400&fit=crop&q=80",
+    name: 'Watches',
+    description: 'Timepieces that tell your story',
+    heroImage: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=1200&h=400&fit=crop&q=80'
   },
   fitness: {
-    name: "Fitness",
-    description: "Premium activewear for every movement",
-    heroImage:
-      "https://images.unsplash.com/photo-1506629905607-d9f2e5e78824?w=1200&h=400&fit=crop&q=80",
+    name: 'Fitness',
+    description: 'Premium activewear for every movement',
+    heroImage: 'https://images.unsplash.com/photo-1506629905607-d9f2e5e78824?w=1200&h=400&fit=crop&q=80'
   },
   beauty: {
-    name: "Beauty",
-    description: "Beauty essentials for your daily routine",
-    heroImage:
-      "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1200&h=400&fit=crop&q=80",
-  },
+    name: 'Beauty',
+    description: 'Beauty essentials for your daily routine',
+    heroImage: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1200&h=400&fit=crop&q=80'
+  }
 } as const;
 
 // TRENDING CONFIGURATION
@@ -498,12 +719,12 @@ export const TRENDING_CONFIG = {
   maxTrendingBrands: 12,
   defaultCampaignDuration: 30, // days
   promotionTypes: {
-    paid: { name: "Paid Promotion", color: "#FFD700" },
-    featured: { name: "Featured", color: "#FF6B6B" },
-    new: { name: "New", color: "#4ECDC4" },
-    sale: { name: "Sale", color: "#FF8B5A" },
-    exclusive: { name: "Exclusive", color: "#845EC2" },
-  },
+    paid: { name: 'Paid Promotion', color: '#FFD700' },
+    featured: { name: 'Featured', color: '#FF6B6B' },
+    new: { name: 'New', color: '#4ECDC4' },
+    sale: { name: 'Sale', color: '#FF8B5A' },
+    exclusive: { name: 'Exclusive', color: '#845EC2' }
+  }
 } as const;
 
 export default BRANDS_DATABASE;
